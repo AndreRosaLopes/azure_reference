@@ -1,0 +1,73 @@
+{
+	"name": "one_pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "breweries",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "00:10:00",
+					"retry": 3,
+					"retryIntervalInSeconds": 60,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "HttpReadSettings",
+							"maxConcurrentConnections": 1,
+							"requestMethod": "GET",
+							"requestTimeout": "00:00:02"
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"maxConcurrentConnections": 1,
+							"copyBehavior": "PreserveHierarchy",
+							"blockSizeInMB": 4
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "breweries_json",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "sink_json_adls2",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_container": "one",
+							"p_directory": {
+								"value": "@concat(\n  'raw/api/openbrewery/',\n  formatDateTime(\n    convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),\n    'yyyy/MM/dd'\n  )\n)",
+								"type": "Expression"
+							},
+							"p_file": {
+								"value": "@concat(\n  'response_',\n  formatDateTime(\n    convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),\n    'HHmmss'\n  ),\n  '_',\n  pipeline().RunId,\n  '.json'\n)",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2026-04-22T14:57:29Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
