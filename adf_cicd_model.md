@@ -6,7 +6,7 @@ In this project, we are following exactly the best pratices recommended by Micro
 
 The recommendation of Microsoft is summarized in the image below:
 
-![ADF CI/CD Best Practices](image.png)
+![ADF CI/CD Best Practices](images/image.png)
 
 [Link to Microsoft Documentation](https://learn.microsoft.com/en-us/azure/data-factory/continuous-integration-delivery#best-practices-for-cicd)
 
