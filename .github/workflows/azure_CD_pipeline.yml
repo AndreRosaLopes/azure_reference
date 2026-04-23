@@ -34,8 +34,8 @@ jobs:
         with:
           scope: resourcegroup
           resourceGroupName: test-rg-one
-          template: ./adf_publish/ARMTemplateForFactory.json
+          template: ./adf_publish/dev-adf-one-1970496f74b3/ARMTemplateForFactory.json
           parameters: >
-            @./adf_publish/ARMTemplateParametersForFactory.json
+            @./adf_publish/dev-adf-one-1970496f74b3/ARMTemplateParametersForFactory.json
             factoryName=adf-test
-            storageAccountName=testac1970496f74b3
+            DataLakeStorageGen2Sink_properties_typeProperties_url=https://testac1970496f74b3.dfs.core.windows.net/
