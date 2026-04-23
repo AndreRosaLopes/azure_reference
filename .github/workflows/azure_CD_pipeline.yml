@@ -70,7 +70,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           auth-type: SERVICE_PRINCIPAL
 
-      - name: Stop all triggers (TEST)
+      - name: Start all triggers (TEST)
         run: |
           RG="test-rg-one"
           factory="test-adf-one-1970496f74b3"
@@ -78,12 +78,12 @@ jobs:
           triggers=$(az datafactory trigger list \
             --resource-group $RG \
             --factory-name $factory \
-            --query "[?properties.runtimeState=='Started'].name" -o tsv)
+            --query "[?properties.runtimeState=='Stopped'].name" -o tsv)
 
           for t in $triggers; do
-            echo "Stopping TEST trigger: $t"
+            echo "Starting TEST trigger: $t"
 
-            az datafactory trigger stop \
+            az datafactory trigger start \
               --resource-group $RG \
               --factory-name $factory \
               --name $t
