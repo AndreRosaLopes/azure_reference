@@ -1,0 +1,44 @@
+{
+	"name": "sink_json_adls2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DataLakeStorageGen2Sink",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_container": {
+				"type": "string",
+				"defaultValue": "one"
+			},
+			"p_folder": {
+				"type": "string",
+				"defaultValue": "raw"
+			},
+			"p_file": {
+				"type": "string",
+				"defaultValue": "file.json"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().p_file",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@dataset().p_folder",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().p_container",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
