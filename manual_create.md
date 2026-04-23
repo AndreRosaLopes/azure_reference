@@ -2,147 +2,115 @@
 
 Manually create all resources for Phase 1 with azure web interface.
 
-## 🔹 Step 1 — Create HTTP Linked Service
-
-1. Go to **Manage (⚙️)**
-2. Click **Linked services**
-3. Click **+ New**
-4. Search and select **HTTP**
-5. Click **Continue**
-
-### Configure:
-
-* **Name**: `ls_http_api`
-* **Base URL**: `https://api.your-source.com`
-* **Authentication**: Anonymous (or API Key / Bearer if required)
-
-6. Click **Test connection**
-7. Click **Create**
-
-## 🔹 Step 2 — Create Dataset for source
-
-1. Go to **Author (✏️)** > **Datasets** > **+ New**
-2. Search and select **HTTP**
-* **Linked service**: select your HTTP linked service
-* **Request method**: GET
-
-## 🔹 Step 3 — Create Dataset for sink
-
-1. Go to **Author (✏️)** > **Datasets** > **+ New**
-2. Select **Azure Data Lake Storage Gen2**
-3. Select format: **JSON**
-4. Set properties:
-* **Name**: `sink_json_adls2`
-* **Linked service**:  `DataLakeStorageGen2Sink`
-* **Azure subscription**: select your Azure subscription
-* **Storage account name**: select your storage account name
-* **Parameters**:
-    > ```
-    > p_container
-    > p_folder
-    > p_file
-    > ```
-3. **Set properties**
-    * **Name**: Sink
-    * **Linked service**: `DataLakeStorageGen2Sink`
-4. Add parameters to the pipeline directly to the dataset `file path`
-* Create
-    > ```
-    > p_container: one
-    > p_folder: raw
-    > p_file: file.json
-    > ```
-* Apply:
-    > ```
-    > p_container: @dataset().p_container
-    > p_folder: @dataset().p_folder
-    > p_file: @dataset().p_file
-    > ```
-
-## 🔹 Step 2 — Source Configuration (one to api)
-
-1. Open your **Pipeline**
-2. Select the **Copy Activity**
-3. Go to the **Source** tab
-
-* **Source dataset**: `ds_api_source`
-* **Request method**: `GET`
-* **Pagination**: configure if API returns paged results
-* **Request timeout / Retry**: adjust for reliability
-
-## 🔹 Step 4 — Create Pipeline
-
-1. Go to **Author (✏️)**
-2. Click **+** → **Pipeline**
-3. Select **Pipeline**
-4. Set properties:
-
-* **Name**: `one_pipeline`
-
----
-
-## 🔹 Step 5 — Add Copy Activity
-
-1. In the pipeline canvas, search for **Copy data**
-2. Drag it into the canvas
-3. General:
-* **Name**: `breweries`
-* **Activity state**: Activated
-* **Timeout**: 00:10:00
-* **Retry**: 3
-* **Retry interval**: 60 (seconds)
-4. Source:
-* **Source dataset**: `breweries_json`
-* **Request method**: `GET`
-* **Request timeout**: 00:00:02
-* **Max concurrent connections**: 1
-5. Sink:
-* **Sink dataset**: `sink_json_adls2`
-* **File path**: 
-    
-    * p_container: one
-    * p_folder:
-```
-@concat(
-    'raw/api/openbrewery/',
-    formatDateTime(
-        convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),
-        'yyyy/MM/dd'
-    )
-)
-```
-    * p_file:
-```
-@concat(
-    'response_',
-    formatDateTime(
-        convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),
-        'HHmmss'
-    ),
-    '_',
-    pipeline().RunId,
-    '.json'
-)
-``` 
-    
-* **Copy behavior**: Preserve hierarchy
-* **Max concurrent connections**: 1
-* **Block size (MB)**: 4
 
 
-## 🔹 Step 6 — Validate all
+# Creating basic resources for each environment
 
-## 🔹 Step 7 — Plublish all
+Let's take the Directory ID for build a unique identifier for resources. Example:
 
-## 🔹 Step 8 — Trigger/schedule the pipeline
-1. Add Trigger > New/Edit
-2. Add new trigger:
-* **Name**: daily
-* **Type**: Schedule
-* **Start date**: 4/22/2026, 12:00:00 AM
-* **Time zone**: Brasilia (UTC-3)
-* **Recurrence**: Every 1 Day(s)
-* **Schedule execution times**: 01:00
-* **Start trigger**: Start trigger on creation (enable)
+263ad61f-3f87-41a2-92f8-1970496f74b3 => 1970496f74b3
 
-## 🔹 Step 7 — Plublish all
+
+
+## 🔹 Step 1 — Create a resource group
+
+1. Go to **Resource groups** > **+ Create**
+* subsciption: `Azure subscription 1`
+* Resource group name: `dev-rg-one`
+* Region: `(US) East US 2`
+2. Click **Review + create** >  **Create** 
+
+## 🔹 Step 2 — Storage account
+1. Go to **Storage accounts** > **+ Create**
+* subsciption: `Azure subscription 1`
+* Resource group name: `dev-rg-one`
+* Storage account name: `devac1970496f74b3`
+* Region: `(US) East US 2`
+* Preferred storage type: Azure Blob Storage or Azure Data Lake Storage Gen2 
+* Performance: Standard
+* Redundancy: Locally-redundant storage (LRS)
+2. Click **Next**
+* Enable hierarchical namespace: `enable`
+3. Click **Review + create** >  **Create** 
+
+## 🔹 Step 3 — Data Lake Storage Gen2
+
+1. Go to **Storage accounts**
+2. In left side menu: Data storage > Containers > + Add container
+* Name: one
+3. Create
+4. Click on created container name: one
+5. Click on + Add Directory
+* Name: raw
+6. Create
+
+Repeat the process for the following directories:
+* Name: curated
+* Name: gold
+
+
+## 🔹 Step 4 — Data Factory
+
+1. Go to **Data factories** > **+ Create**
+* subsciption: `Azure subscription 1`
+* Resource group: `dev-rg-one`
+* Name: `dev-adf-one-1970496f74b3`
+* Region: `(US) East US 2`
+* Version: `V2`
+2. Click **Review + create** >  **Create** 
+
+Repeat the Step 1 to 2 for each environment:
+* `test`
+* `prod`
+
+
+# Setting up permissions and access to resources
+
+We are going to set up the permissions and access to resources for each environment according to the following table (the users and groups must be created in azure AD): 
+
+| Resource           | resource-env | Principal                              | principal-env | Role / Permission             | Purpose                          |
+| ------------------ | ------------ | -------------------------------------- | ------------- | ----------------------------- | -------------------------------- |
+| Storage Account    | dev          | Managed Identity of Azure Data Factory | dev           | Storage Blob Data Contributor | Read/write/delete raw data files |
+| root Container     | dev          | Managed Identity of Azure Data Factory | dev           | ACL (rwx)                     | Full pipeline access             |
+| Azure Data Factory | dev          | Developer / Engineer                   | -           | Data Factory Contributor      | Create and modify pipelines      |
+| ADLS Gen2          | dev          | Developer / Engineer                   | -           | Storage Blob Data Contributor | Test and validate data           |
+| Storage Account    | test         | Managed Identity of Azure Data Factory | test          | Storage Blob Data Contributor | Pipeline execution               |
+| root Container     | test         | Managed Identity of Azure Data Factory | test          | ACL (r-x / restricted rwx)    | Controlled execution             |
+| Azure Data Factory | test         | Developer / Engineer                   | -          | Data Factory Operator         | Execute and monitor pipelines    |
+| ADLS Gen2          | test         | Developer / Engineer                   | -          | Storage Blob Data Reader      | Validate data (read-only)        |
+| Storage Account    | prod         | Managed Identity of Azure Data Factory | prod          | Storage Blob Data Contributor | Write via pipelines only         |
+| root Container     | prod         | Managed Identity of Azure Data Factory | prod          | ACL (rwx – MI only)           | Automated execution              |
+| Azure Data Factory | prod         | Developer / Engineer                   | -          | Data Factory Reader           | Monitoring only                  |
+| Azure Data Factory | prod         | DataOps Operator                       | -          | Data Factory Operator         | Trigger and operate pipelines    |
+| Azure Data Factory | prod         | CI/CD pipeline(Service Principal)      | prod          | Data Factory Contributor      | Automated deployments            |
+| ADLS Gen2          | prod         | Developer / Engineer                   | -          | Storage Blob Data Reader      | Audit and troubleshooting        |
+| ADLS Gen2          | prod         | DataOps Operator                       | -          | Storage Blob Data Reader      | Operational support              |
+| ADLS Gen2          | prod         | BI Tools (e.g., Power BI)              | prod          | Storage Blob Data Reader      | Data consumption                 |
+
+## 🔹 Step 1 — Set Storage Blob Data Contributor Role for the Managed Identity of ADF
+
+1. Go to **Storage accounts**
+2. Click on your storage account
+3. In left side menu: **Access control (IAM)**
+4. Click on **+ Add role assignment**
+5. Select **Storage Blob Data Contributor** role
+6. Click **Next**
+7. Assign access to: **Managed identity**
+8. Click **Select members**
+9. Search for the Managed Identity you created in Step 1
+10. Click **Select**
+11. Click **Review + assign**
+
+
+## 🔹 Step 2 — Set root Container ACL (r-x / restricted rwx) for the Managed Identity of ADF
+
+1. Go to **Storage accounts**
+2. Click on your storage account
+3. In left side menu: **Data storage > Containers**
+4. Click on your container
+5. Click on **Settings** > **Manage ACL**
+6. For both, **Access permissions** and **Default permissions**:
+7. Click on **+ Add principal**
+8. Search for `dev` > Select
+9. Mark down: Read / Write / Execute
+10. Click **Save**
