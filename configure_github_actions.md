@@ -1,10 +1,42 @@
-Perfect — your flow is already aligned with best practices. Now let’s **operationalize CD with GitHub Actions** using your `adf_publish` branch.
+# 🚀 CD Setup with GitHub Actions
 
----
+## Step 1 — Service Principal (SP)
 
-# 🚀 CD Setup — Step by Step (GitHub Actions)
+First thing is to create a Service Principal (SP) and assign the role of contributor to the resource group where the ADF is located.
 
-Using GitHub Actions
+### Check users and sp
+
+List all users in the tenant:
+```bash
+az ad user list --output table
+az ad sp list --output table
+
+```
+
+Check account:
+```bash
+az account list --output table
+az account show
+```
+
+Create a service principal:
+```bash
+az ad sp create-for-rbac \
+  --name "github-adf-deploy" \
+  --role contributor \
+  --scopes /subscriptions/<ID/SUBSCRIPTION_ID>
+```
+
+Take notes of output:
+```
+clientId : appId
+clientSecret : password
+tenantId : tenant
+subscriptionId : <ID/SUBSCRIPTION_ID>
+```
+
+
+
 
 ---
 
@@ -22,51 +54,24 @@ Create:
 
 * No approval required (optional)
 
+Add environment secrets:
+
+* AZURE_CLIENT_ID
+* AZURE_CLIENT_SECRET
+* AZURE_TENANT_ID
+* AZURE_SUBSCRIPTION_ID
+
 ### 🚀 `prod`
 
 * Add **Required reviewers**
   👉 This enables the **manual approval gate**
 
----
+Add environment secrets:
 
-## 🔹 2. Configure Azure Credentials
-
-Create a Service Principal:
-
-```bash
-az ad sp create-for-rbac --name "github-adf-deploy" \
-  --role contributor \
-  --scopes /subscriptions/<SUBSCRIPTION_ID>
-```
-
-Save output:
-
-```
-clientId
-clientSecret
-tenantId
-subscriptionId
-```
-
----
-
-## 🔹 3. Add GitHub Secrets
-
-Go to:
-
-```
-Repo → Settings → Secrets → Actions
-```
-
-Add:
-
-```
-AZURE_CLIENT_ID
-AZURE_TENANT_ID
-AZURE_SUBSCRIPTION_ID
-AZURE_CLIENT_SECRET
-```
-
+* AZURE_CLIENT_ID
+* AZURE_CLIENT_SECRET
+* AZURE_TENANT_ID
+* AZURE_SUBSCRIPTION_ID
 ---
 
 ## 🔹 4. Create Workflow File
@@ -74,76 +79,12 @@ AZURE_CLIENT_SECRET
 Create:
 
 ```
-.github/workflows/adf-cd.yml
+.github/workflows/azure_CD_pipeline.yml
 ```
 
 ---
 
-# 📄 Suggested YAML (Aligned with your flow)
 
-```yaml
-name: ADF CD Pipeline
-
-on:
-  push:
-    branches:
-      - adf_publish
-
-jobs:
-
-  deploy-test:
-    name: Deploy to TEST
-    runs-on: ubuntu-latest
-
-    environment: test
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-
-      - name: Deploy ARM Template (TEST)
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          resourceGroupName: <TEST-RG>
-          template: ./adf_publish/ARMTemplateForFactory.json
-          parameters: ./adf_publish/ARMTemplateParametersForFactory.json
-
-  deploy-prod:
-    name: Deploy to PROD
-    runs-on: ubuntu-latest
-    needs: deploy-test
-
-    environment: prod   # 🔥 this creates the approval gate
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-
-      - name: Deploy ARM Template (PROD)
-        uses: azure/arm-deploy@v1
-        with:
-          scope: resourcegroup
-          resourceGroupName: <PROD-RG>
-          template: ./adf_publish/ARMTemplateForFactory.json
-          parameters: ./adf_publish/ARMTemplateParametersForFactory.json
-```
 
 ---
 
@@ -172,34 +113,3 @@ Deploy TEST (automatic)
    ↓
 Deploy PROD
 ```
-
----
-
-# 🔑 Critical Detail
-
-👉 This line creates your approval:
-
-```yaml
-environment: prod
-```
-
-👉 Controlled via GitHub UI (Required reviewers)
-
----
-
-# 🧠 Best Practices (Important)
-
-* Use **separate resource groups**:
-
-  * `<TEST-RG>`
-  * `<PROD-RG>`
-
-* Parameterize:
-
-  * factory name
-  * linked services (if needed)
-
-* Never modify `adf_publish` manually
-
----
-

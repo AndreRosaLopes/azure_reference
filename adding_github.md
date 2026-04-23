@@ -4,7 +4,7 @@
 
 This step integrates Azure Data Factory with a GitHub repository to enable source control, versioning, and collaborative development.
 
-Once configured, all changes in ADF (pipelines, datasets, linked services) will be saved as JSON files in the repository instead of being directly published to the live environment.
+Once configured, all changes in ADF (pipelines, datasets, linked services) will be saved as JSON files in the repository instead of being directly published to the dev environment. We just need to link ADF's dev environment to the GitHub repository.
 
 This enables:
 
@@ -46,11 +46,14 @@ Connect Azure Data Factory to a GitHub repository using the Azure portal UI.
 3. `Continue`to authorize ADF to access your GitHub account
 4. Select repository: `enable`
 5. Repository name: `azure_reference`
-6. Collaboration branch: `main`
-7. Root folder: `/adf`
-8. Use custom comment: `enable`
-9. Import existing resources to repository: `enable`
-10. Import resource into this branch: `main`
+6. Publish branch: `adf_publish`  
+7. Collaboration branch: `main`
+8. Root folder: `/adf`
+9. Use custom comment: `enable`
+10. Import existing resources to repository: `enable`
+11. Import resource into this branch: `main`
+12. **Apply**
 
+Ps.: The **Publish branch** is the branch in your repository where publishing related ARM templates are stored and updated.
 
-
+![alt text](images/image-1.png)

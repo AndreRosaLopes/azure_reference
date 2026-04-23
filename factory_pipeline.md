@@ -119,15 +119,7 @@ The objective here is to create a reusable dataset for sink that writes in JSON 
 * **Max concurrent connections**: 1
 * **Block size (MB)**: 4
 
----
-
-## 🔹 Step 6 — Validate all
-
-## 🔹 Step 7 — Plublish all
-
-![alt text](images/image2.png)
-
-## 🔹 Step 8 — Trigger/schedule the pipeline
+## 🔹 Step 6 — Trigger/schedule the pipeline
 1. Add Trigger > New/Edit
 2. Add new trigger:
 * **Name**: daily
@@ -138,32 +130,9 @@ The objective here is to create a reusable dataset for sink that writes in JSON 
 * **Schedule execution times**: 01:00
 * **Start trigger**: Start trigger on creation (enable)
 
-## 🔹 Step 7 — Plublish all
+## 🔹 Step 7 — Validate all
 
+## 🔹 Step 8 — Plublish all
 
+![alt text](images/image2.png)
 
-
-
-3. **Set properties**
-    * **Name**: Sink
-    * **Linked service**: `DataLakeStorageGen2Sink`
-4. Add parameters to the pipeline directly to the dataset `file path`
-* Create
-    > ```
-    > p_container: one
-    > p_folder: raw
-    > p_file: file.json
-    > ```
-* Apply:
-    > ```
-    > p_container: @dataset().p_container
-    > p_folder: @dataset().p_folder
-    > p_file: @dataset().p_file
-    > ```
-
-## 🔹 Step 5 — Source Configuration (one to api)
-
-* **Source dataset**: `ds_api_source`
-* **Request method**: `GET`
-* **Pagination**: configure if API returns paged results
-* **Request timeout / Retry**: adjust for reliability
