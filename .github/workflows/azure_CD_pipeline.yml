@@ -1,0 +1,41 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# More info on Python, GitHub Actions, and Azure Functions: https://aka.ms/python-webapps-actions
+
+name: ADF CD Pipeline
+
+on:
+  push:
+    branches:
+      - adf_publish
+
+jobs:
+
+  deploy-test:
+    name: Deploy to TEST
+    runs-on: ubuntu-latest
+
+    environment: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+      - name: Deploy ARM Template (TEST)
+        uses: azure/arm-deploy@v1
+        with:
+          scope: resourcegroup
+          resourceGroupName: test-rg-one
+          template: ./adf_publish/dev-adf-one-1970496f74b3/ARMTemplateForFactory.json
+          parameters: >
+            @./adf_publish/dev-adf-one-1970496f74b3/ARMTemplateParametersForFactory.json
+            factoryName=test-adf-one-1970496f74b3
+            DataLakeStorageGen2Sink_properties_typeProperties_url=https://testac1970496f74b3.dfs.core.windows.net/
