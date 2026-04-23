@@ -19,6 +19,10 @@ The recommendation of Microsoft is summarized in the image below:
 | `main`        | DEV (integration) | JSON (approved / versioned) | Merge from `feature/*` → **Publish All**                 | Approved and integrated code. Source of truth before deployment |
 | `adf_publish` | TEST / PROD       | ARM Templates + parameters  | Auto-generated from **Publish All** → CI/CD → Deploy     | **Deployment artifact branch**. Used by CI/CD to deploy consistently across environments       |
 
+The `adf_publish` branch is a default branch automatically managed by Azure Data Factory when Git integration is enabled. During the first “Publish All” operation, ADF automatically generates this branch (if it does not already exist) and uses it to store the deployment artifacts in the form of ARM templates. 
+
+From that point on, every publish action updates the `adf_publish` branch automatically, which is then used by CI/CD pipelines for deployment to TEST and PROD environments.
+
 
 So, the deploy flow is:
 
