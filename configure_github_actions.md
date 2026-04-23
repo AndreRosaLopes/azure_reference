@@ -25,6 +25,9 @@ az ad sp create-for-rbac \
   --name "github-adf-deploy" \
   --role contributor \
   --scopes /subscriptions/<ID/SUBSCRIPTION_ID>
+
+
+az ad sp create-for-rbac --name "github-actions-adf-cd" --role contributor --scopes /subscriptions/<ID/SUBSCRIPTION_ID>/resourceGroups/test-rg-one --sdk-auth -o json
 ```
 
 Take notes of output:
@@ -40,10 +43,9 @@ If you lost the credentials, you can reset them doing the following:
 az ad sp list --display-name "github-adf-deploy" --query "[].appId" -o tsv
 # finaly reset credentials:
 az ad sp credential reset --id <APP_ID>
+ou 
+az ad sp credential reset --id <APP_ID> -o json
 ```
-
-
-
 
 ---
 
