@@ -34,6 +34,13 @@ clientSecret : password
 tenantId : tenant
 subscriptionId : <ID/SUBSCRIPTION_ID>
 ```
+If you lost the credentials, you can reset them doing the following:
+```bash
+# find App ID
+az ad sp list --display-name "github-adf-deploy" --query "[].appId" -o tsv
+# finaly reset credentials:
+az ad sp credential reset --id <APP_ID>
+```
 
 
 
@@ -56,10 +63,16 @@ Create:
 
 Add environment secrets:
 
-* AZURE_CLIENT_ID
-* AZURE_CLIENT_SECRET
-* AZURE_TENANT_ID
-* AZURE_SUBSCRIPTION_ID
+key: AZURE_CREDENTIALS
+value:
+```json
+{
+  "clientId": "<APP_ID>",
+  "clientSecret": "<PASSWORD>",
+  "tenantId": "<TENANT_ID>",
+  "subscriptionId": "<SUBSCRIPTION_ID>"
+}
+```
 
 ### 🚀 `prod`
 
@@ -68,10 +81,16 @@ Add environment secrets:
 
 Add environment secrets:
 
-* AZURE_CLIENT_ID
-* AZURE_CLIENT_SECRET
-* AZURE_TENANT_ID
-* AZURE_SUBSCRIPTION_ID
+key: AZURE_CREDENTIALS
+value:
+```json
+{
+  "clientId": "<APP_ID>",
+  "clientSecret": "<PASSWORD>",
+  "tenantId": "<TENANT_ID>",
+  "subscriptionId": "<SUBSCRIPTION_ID>"
+}
+```
 ---
 
 ## 🔹 4. Create Workflow File
@@ -80,36 +99,4 @@ Create:
 
 ```
 .github/workflows/azure_CD_pipeline.yml
-```
-
----
-
-
-
----
-
-# 🔄 How This Matches Your Flow
-
-## Trigger
-
-```
-Publish All (ADF)
-   ↓
-updates adf_publish
-   ↓
-push → triggers GitHub Actions
-```
-
----
-
-## CI/CD Behavior
-
-```
-adf_publish
-   ↓
-Deploy TEST (automatic)
-   ↓
-⏸️ WAIT (GitHub Environment approval)
-   ↓
-Deploy PROD
 ```
