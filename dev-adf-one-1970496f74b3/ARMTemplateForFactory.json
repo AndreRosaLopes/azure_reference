@@ -31,7 +31,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "breweries",
+						"name": "breweries2",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
