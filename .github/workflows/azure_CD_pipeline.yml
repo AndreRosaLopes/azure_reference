@@ -11,6 +11,49 @@ on:
 
 jobs:
 
+  deploy-dev:
+    name: Deploy to DEV
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Stop all triggers (DEV)
+        run: |
+          RG="dev-rg-one"
+          factory="dev-adf-one-1970496f74b3"
+
+          triggers=$(az datafactory trigger list \
+            --resource-group $RG \
+            --factory-name $factory \
+            --query "[?properties.runtimeState=='Started'].name" -o tsv)
+
+          for t in $triggers; do
+            echo "Stopping DEV trigger: $t"
+
+            az datafactory trigger stop \
+              --resource-group $RG \
+              --factory-name $factory \
+              --name $t
+          done
+
+      - name: Deploy ARM Template (DEV)
+        uses: azure/arm-deploy@v1
+        with:
+          scope: resourcegroup
+          resourceGroupName: dev-rg-one
+          template: ./dev-adf-one-1970496f74b3/ARMTemplateForFactory.json
+          parameters: >
+            @./dev-adf-one-1970496f74b3/ARMTemplateParametersForFactory.json
+            factoryName=dev-adf-one-1970496f74b3
+
   deploy-test:
     name: Deploy to TEST
     runs-on: ubuntu-latest
@@ -26,6 +69,25 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           auth-type: SERVICE_PRINCIPAL
+
+      - name: Stop all triggers (TEST)
+        run: |
+          RG="test-rg-one"
+          factory="test-adf-one-1970496f74b3"
+
+          triggers=$(az datafactory trigger list \
+            --resource-group $RG \
+            --factory-name $factory \
+            --query "[?properties.runtimeState=='Started'].name" -o tsv)
+
+          for t in $triggers; do
+            echo "Stopping TEST trigger: $t"
+
+            az datafactory trigger stop \
+              --resource-group $RG \
+              --factory-name $factory \
+              --name $t
+          done
 
       - name: Deploy ARM Template (TEST)
         uses: azure/arm-deploy@v1
