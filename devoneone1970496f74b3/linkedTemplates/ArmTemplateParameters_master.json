@@ -9,7 +9,7 @@
 			"value": ""
 		},
 		"DataLakeStorageGen2Sink_properties_typeProperties_url": {
-			"value": "https://devac1970496f74b3.dfs.core.windows.net/"
+			"value": "https://devoneac1970496f74b3.dfs.core.windows.net/"
 		},
 		"breweries_api_properties_typeProperties_url": {
 			"value": "https://api.openbrewerydb.org/v1/breweries"

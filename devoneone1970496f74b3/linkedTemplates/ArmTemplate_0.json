@@ -13,7 +13,7 @@
 		},
 		"DataLakeStorageGen2Sink_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://devac1970496f74b3.dfs.core.windows.net/"
+			"defaultValue": "https://devoneac1970496f74b3.dfs.core.windows.net/"
 		},
 		"breweries_api_properties_typeProperties_url": {
 			"type": "string",
@@ -237,11 +237,11 @@
 								"parameters": {
 									"p_container": "one",
 									"p_folder": {
-										"value": "@concat(\n    'raw/api/openbrewery/',\n    formatDateTime(\n        convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),\n        'yyyy/MM/dd'\n    )\n)",
+										"value": "@concat(\n    'bronze/api/openbrewery/',\n    formatDateTime(\n        convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),\n        'yyyy/MM/dd'\n    )\n)",
 										"type": "Expression"
 									},
 									"p_file": {
-										"value": "@concat(\n    'response_',\n    formatDateTime(\n        convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),\n        'HHmmss'\n    ),\n    '_',\n    pipeline().RunId,\n    '.json'\n)",
+										"value": "@concat(\n    'breweries_',\n    formatDateTime(\n        convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),\n        'HHmmss'\n    ),\n    '_',\n    pipeline().RunId,\n    '.json'\n)",
 										"type": "Expression"
 									}
 								}
