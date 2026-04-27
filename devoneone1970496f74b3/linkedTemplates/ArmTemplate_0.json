@@ -237,7 +237,7 @@
 								"parameters": {
 									"p_container": "one",
 									"p_folder": {
-										"value": "@concat(\n    'bronze/api/openbrewery/',\n    formatDateTime(\n        convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),\n        'yyyy/MM/dd'\n    )\n)",
+										"value": "@concat(\n    'bronze/api/openbrewery/',\n    'year=', formatDateTime(convertTimeZone(utcNow(),'UTC','E. South America Standard Time'), 'yyyy'),\n    '/month=', formatDateTime(convertTimeZone(utcNow(),'UTC','E. South America Standard Time'), 'MM'),\n    '/day=', formatDateTime(convertTimeZone(utcNow(),'UTC','E. South America Standard Time'), 'dd')\n)",
 										"type": "Expression"
 									},
 									"p_file": {
