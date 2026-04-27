@@ -1,0 +1,18 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "devoneone1970496f74b3"
+		},
+		"DataLakeStorageGen2Sink_accountKey": {
+			"value": ""
+		},
+		"DataLakeStorageGen2Sink_properties_typeProperties_url": {
+			"value": "https://devac1970496f74b3.dfs.core.windows.net/"
+		},
+		"breweries_api_properties_typeProperties_url": {
+			"value": "https://api.openbrewerydb.org/v1/breweries"
+		}
+	}
+}
