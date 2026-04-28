@@ -1,0 +1,10 @@
+{
+  "source_path": "/Volumes/one/bronze/api",
+  "target_table": "one.silver.breweries",
+  "quarantine_table": "one.silver.quarantine_breweries",
+  "checkpoint_path": "/Volumes/one/silver/checkpoints/breweries",
+  "schema_path": "/Volumes/one/silver/schemas/breweries",
+  "watermark_days": 7,
+  "join_cols": ["id", "row_hash"],
+  "partition_column": []
+}

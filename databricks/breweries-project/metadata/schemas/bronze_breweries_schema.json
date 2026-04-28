@@ -1,0 +1,20 @@
+{
+  "type": "struct",
+  "fields": [
+    {"name": "id", "type": "string", "nullable": true},
+    {"name": "name", "type": "string", "nullable": true},
+    {"name": "brewery_type", "type": "string", "nullable": true},
+    {"name": "address_1", "type": "string", "nullable": true},
+    {"name": "city", "type": "string", "nullable": true},
+    {"name": "state_province", "type": "string", "nullable": true},
+    {"name": "postal_code", "type": "string", "nullable": true},
+    {"name": "country", "type": "string", "nullable": true},
+    {"name": "longitude", "type": "double", "nullable": true},
+    {"name": "latitude", "type": "double", "nullable": true},
+    {"name": "phone", "type": "string", "nullable": true},
+    {"name": "website_url", "type": "string", "nullable": true},
+    {"name": "year", "type": "string", "nullable": true},
+    {"name": "month", "type": "string", "nullable": true},
+    {"name": "day", "type": "string", "nullable": true}
+  ]
+}
