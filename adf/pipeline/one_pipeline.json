@@ -66,13 +66,13 @@
 				]
 			},
 			{
-				"name": "Notebook1",
-				"type": "DatabricksNotebook",
+				"name": "mart_breweries",
+				"type": "DatabricksJob",
 				"dependsOn": [
 					{
 						"activity": "breweries2",
 						"dependencyConditions": [
-							"Succeeded"
+							"Completed"
 						]
 					}
 				],
@@ -85,11 +85,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/andrerosalopes@outlook.com/databricks/databricks/notebooks/breweries_silver",
-					"baseParameters": {
-						"table_name": "bronze_breweries",
-						"config_base_path": "/metadata/pipelines"
-					}
+					"jobId": "958390155857179"
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks1",
