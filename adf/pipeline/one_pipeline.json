@@ -85,7 +85,11 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/Users/andrerosalopes@outlook.com/databricks/databricks/notebooks/breweries_silver"
+					"notebookPath": "/Users/andrerosalopes@outlook.com/databricks/databricks/notebooks/breweries_silver",
+					"baseParameters": {
+						"table_name": "bronze_breweries",
+						"config_base_path": "/metadata/pipelines"
+					}
 				},
 				"linkedServiceName": {
 					"referenceName": "AzureDatabricks1",
