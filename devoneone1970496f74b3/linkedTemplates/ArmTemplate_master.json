@@ -7,6 +7,10 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "devoneone1970496f74b3"
 		},
+		"AzureDatabricks1_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
+		},
 		"DataLakeStorageGen2Sink_accountKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'DataLakeStorageGen2Sink'"
@@ -45,6 +49,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"AzureDatabricks1_accessToken": {
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
 					},
 					"DataLakeStorageGen2Sink_accountKey": {
 						"value": "[parameters('DataLakeStorageGen2Sink_accountKey')]"
