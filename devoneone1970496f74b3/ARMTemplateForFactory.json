@@ -99,13 +99,13 @@
 						]
 					},
 					{
-						"name": "Notebook1",
-						"type": "DatabricksNotebook",
+						"name": "mart_breweries",
+						"type": "DatabricksJob",
 						"dependsOn": [
 							{
 								"activity": "breweries2",
 								"dependencyConditions": [
-									"Succeeded"
+									"Completed"
 								]
 							}
 						],
@@ -118,7 +118,7 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"notebookPath": "/Users/andrerosalopes@outlook.com/databricks/databricks/notebooks/breweries_silver"
+							"jobId": "958390155857179"
 						},
 						"linkedServiceName": {
 							"referenceName": "AzureDatabricks1",
@@ -272,15 +272,7 @@
 					"accessToken": {
 						"type": "SecureString",
 						"value": "[parameters('AzureDatabricks1_accessToken')]"
-					},
-					"newClusterNodeType": "Standard_DS3_v2",
-					"newClusterNumOfWorker": "1",
-					"newClusterSparkEnvVars": {
-						"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
-					},
-					"newClusterVersion": "18.1.x-scala2.13",
-					"clusterOption": "Fixed",
-					"newClusterInitScripts": []
+					}
 				}
 			},
 			"dependsOn": []
