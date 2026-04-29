@@ -4,12 +4,12 @@ def add_metadata_columns(df):
     """Adds audit columns to the DataFrame."""
     return df \
         .withColumn("ingestion_time", current_timestamp()) \
-        .withColumn("source_file", input_file_name())
+        .withColumn("source_file",  col("_metadata.file_path"))
 
 def add_hash_column(df, column_name="row_hash"):
     """Calculates MD5 hash of all columns to track changes."""
     # We exclude metadata columns from hash to ensure business data changes are caught
-    exclude_cols = ["ingestion_time", "source_file", "year", "month", "day"]
+    exclude_cols = ["_metadata","ingestion_time", "source_file", "year", "month", "day"]
     business_cols = [c for c in df.columns if c not in exclude_cols]
     return df.withColumn(column_name, md5(concat_ws("||", *business_cols)))
 

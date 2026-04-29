@@ -1,39 +1,67 @@
-from delta.tables import DeltaTable
-
-def write_to_silver(df, target_table, checkpoint_path, join_cols, partition_col):
+def write_to_silver_batch(df, target_table, join_cols, partition_col):
     """
-    Orchestrates the WriteStream for Silver tables using MERGE logic.
+    Writes a DataFrame to a Silver table using MERGE logic (Batch version).
+    Ensures idempotency and uses Partition Pruning for performance.
+    """
+    spark = df.sparkSession
+    
+    # Registra o DataFrame como uma view temporária para o SQL
+    df.createOrReplaceTempView("batch_updates")
+    
+    # 2. Constrói a condição de JOIN pelo ID
+
+    j_cols = [join_cols] if isinstance(join_cols, str) else join_cols
+    merge_condition = " AND ".join([f"t.{c} = s.{c}" for c in j_cols ])
+    
+    # 3. Executa o MERGE (Insert-Only para deduplicação)
+    spark.sql(f"""
+        MERGE INTO {target_table} t
+        USING batch_updates s
+        ON {merge_condition}
+        WHEN NOT MATCHED THEN INSERT *
+    """)
+    
+    # Limpeza da view
+    spark.catalog.dropTempView("batch_updates")
+
+
+def write_to_silver(df, target_table, join_cols, partition_col, checkpoint_location):
+    """
+    Writes a streaming DataFrame to a Silver table using MERGE logic via foreachBatch.
+    Includes the .trigger(availableNow=True) for compatibility with Serverless compute.
     """
     
-    def upsert_to_delta(microBatchDF, batchId):
-        if microBatchDF.isEmpty(): return
+    def upsert_to_delta(micro_batch_df, batch_id):
+        """
+        Processes each micro-batch as a standard batch DataFrame.
+        """
+        # Register the micro-batch DataFrame as a temporary view
+        view_name = "batch_updates"
+        micro_batch_df.createOrReplaceTempView(view_name)
         
-        spark = microBatchDF.sparkSession
+        # Construct the JOIN condition dynamically
+        j_cols = [join_cols] if isinstance(join_cols, str) else join_cols
+        merge_condition = " AND ".join([f"t.{c} = s.{c}" for c in j_cols])
         
-        if spark.catalog.tableExists(target_table):
-            delta_table = DeltaTable.forName(spark, target_table)
-            
-            j_cols = [join_cols] if isinstance(join_cols, str) else join_cols
-            merge_condition = " AND ".join([f"t.{c} = s.{c}" for c in j_cols])
-            
-            delta_table.alias("t").merge(
-                microBatchDF.alias("s"),
-                merge_condition
-            ).whenNotMatchedInsertAll() \
-                .execute()
-        else:
-            writer = microBatchDF.write.format("delta")
-            if partition_col:
-                writer = writer.partitionBy(partition_col)
-            writer.saveAsTable(target_table)
+        # Execute the MERGE statement (Insert-Only)
+        micro_batch_df.sparkSession.sql(f"""
+            MERGE INTO {target_table} t
+            USING {view_name} s
+            ON {merge_condition}
+            WHEN NOT MATCHED THEN INSERT *
+        """)
+        
+        # Remove the temporary view
+        micro_batch_df.sparkSession.catalog.dropTempView(view_name)
 
-    query = df.writeStream \
-        .foreachBatch(upsert_to_delta) \
-        .option("checkpointLocation", checkpoint_path) \
-        .trigger(availableNow=True) \
-        .start()
-    
-    query.awaitTermination()
+    # Start the write stream with AvailableNow trigger
+    return (df.writeStream
+            .foreachBatch(upsert_to_delta)
+            .outputMode("update")
+            .option("checkpointLocation", checkpoint_location)
+            .trigger(availableNow=True) # Required for Serverless compute
+            .start())
+
 
 def write_to_quarantine(df, table_name, target_table, checkpoint_path):
     """
