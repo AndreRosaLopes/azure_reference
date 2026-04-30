@@ -27,8 +27,8 @@ jobs:
 
       - name: Stop all triggers (DEV)
         run: |
-          RG="dev-rg-one"
-          factory="dev-adf-one-1970496f74b3"
+          RG="dev-one-rg-1970496f74b3"
+          factory="devoneadf1970496f74b3"
 
           triggers=$(az datafactory trigger list \
             --resource-group $RG \
@@ -48,11 +48,11 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           scope: resourcegroup
-          resourceGroupName: dev-rg-one
-          template: ./dev-adf-one-1970496f74b3/ARMTemplateForFactory.json
+          resourceGroupName: dev-one-rg-1970496f74b3
+          template: ./devoneadf1970496f74b3/ARMTemplateForFactory.json
           parameters: >
-            @./dev-adf-one-1970496f74b3/ARMTemplateParametersForFactory.json
-            factoryName=dev-adf-one-1970496f74b3
+            @./devoneadf1970496f74b3/ARMTemplateParametersForFactory.json
+            factoryName=devoneadf1970496f74b3
 
   deploy-test:
     name: Deploy to TEST
@@ -72,8 +72,8 @@ jobs:
 
       - name: Start all triggers (TEST)
         run: |
-          RG="test-rg-one"
-          factory="test-adf-one-1970496f74b3"
+          RG="test-one-rg-1970496f74b3"
+          factory="testoneadf1970496f74b3"
 
           triggers=$(az datafactory trigger list \
             --resource-group $RG \
@@ -93,9 +93,8 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           scope: resourcegroup
-          resourceGroupName: test-rg-one
-          template: ./dev-adf-one-1970496f74b3/ARMTemplateForFactory.json
+          resourceGroupName: test-one-rg-1970496f74b3
+          template: ./devoneadf1970496f74b3/ARMTemplateForFactory.json
           parameters: >
-            @./dev-adf-one-1970496f74b3/ARMTemplateParametersForFactory.json
-            factoryName=test-adf-one-1970496f74b3
-            DataLakeStorageGen2Sink_properties_typeProperties_url=https://testac1970496f74b3.dfs.core.windows.net/
+            @./devoneadf1970496f74b3/ARMTemplateParametersForFactory.json
+            factoryName=testoneadf1970496f74b3
