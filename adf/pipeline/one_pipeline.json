@@ -89,11 +89,26 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"jobId": "478688970863341"
+					"jobParameters": {
+						"p_url_databricks": {
+							"value": "@pipeline().globalParameters.databricks_url",
+							"type": "Expression"
+						}
+					}
 				},
 				"linkedServiceName": {
 					"referenceName": "Serverless",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"linked_service_workspace_id": {
+							"value": "@pipeline().globalParameters.databricks_workspace_id",
+							"type": "Expression"
+						},
+						"linked_service_url_databricks": {
+							"value": "@pipeline().globalParameters.databricks_url",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
