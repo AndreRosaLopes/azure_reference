@@ -1,0 +1,12 @@
+{
+	"name": "devoneadf1970496f74b3",
+	"properties": {
+		"globalParameters": {
+			"storage_url": {
+				"type": "string",
+				"value": "https://devoneac1970496f74b3.dfs.core.windows.net/"
+			}
+		}
+	},
+	"location": "eastus2"
+}
