@@ -1,10 +1,16 @@
 {
 	"name": "DataLakeStorageGen2Sink",
 	"properties": {
+		"parameters": {
+			"p_linked_service_storage_url": {
+				"type": "String",
+				"defaultValue": "url"
+			}
+		},
 		"annotations": [],
 		"type": "AzureBlobFS",
 		"typeProperties": {
-			"url": "https://devoneac1970496f74b3.dfs.core.windows.net/"
+			"url": "@{linkedService().p_linked_service_storage_url}"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/linkedservices"
