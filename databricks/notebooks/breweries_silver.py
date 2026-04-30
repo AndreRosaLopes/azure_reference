@@ -73,6 +73,7 @@ schema = StructType.fromJson(schema_dict)
 df_raw = spark.readStream.format("cloudFiles") \
     .option("cloudFiles.format", "json") \
     .option("cloudFiles.schemaLocation", schema_path) \
+    .option("optimizeWrite", "true")
     .load(source_path)
 
 # COMMAND ----------

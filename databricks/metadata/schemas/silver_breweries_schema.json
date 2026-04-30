@@ -1,0 +1,25 @@
+{
+  "type": "struct",
+  "fields": [
+    {"name": "address_1", "type": "string", "nullable": true},
+    {"name": "address_2", "type": "string", "nullable": true},
+    {"name": "address_3", "type": "string", "nullable": true},
+    {"name": "brewery_type", "type": "string", "nullable": true},
+    {"name": "city", "type": "string", "nullable": true},
+    {"name": "country", "type": "string", "nullable": true},
+    {"name": "id", "type": "string", "nullable": true},
+    {"name": "latitude", "type": "string", "nullable": true},
+    {"name": "longitude", "type": "string", "nullable": true},
+    {"name": "name", "type": "string", "nullable": true},
+    {"name": "phone", "type": "string", "nullable": true},
+    {"name": "postal_code", "type": "string", "nullable": true},
+    {"name": "state", "type": "string", "nullable": true},
+    {"name": "state_province", "type": "string", "nullable": true},
+    {"name": "street", "type": "string", "nullable": true},
+    {"name": "website_url", "type": "string", "nullable": true},
+    {"name": "_rescued_data", "type": "string", "nullable": true},
+    {"name": "ingestion_time", "type": "timestamp", "nullable": false},
+    {"name": "source_file", "type": "string", "nullable": false},
+    {"name": "row_hash", "type": "string", "nullable": false}
+  ]
+}
