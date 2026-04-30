@@ -1,12 +1,20 @@
 {
 	"name": "Serverless",
 	"properties": {
+		"parameters": {
+			"linked_service_workspace_id": {
+				"type": "String"
+			},
+			"linked_service_url_databricks": {
+				"type": "String"
+			}
+		},
 		"annotations": [],
 		"type": "AzureDatabricks",
 		"typeProperties": {
-			"domain": "https://adb-7405610813235620.0.azuredatabricks.net",
+			"domain": "@linkedService().linked_service_url_databricks",
 			"authentication": "MSI",
-			"workspaceResourceId": "/subscriptions/24629d6d-64a5-49ac-97ff-6d8b924e3610/resourceGroups/dev-one-rg-1970496f74b3/providers/Microsoft.Databricks/workspaces/dev-one-databricks-1970496f74b3"
+			"workspaceResourceId": "@linkedService().linked_service_workspace_id"
 		}
 	}
 }
