@@ -13,7 +13,7 @@
 		},
 		"DataLakeStorageGen2Sink_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://devoneac1970496f74b3.dfs.core.windows.net/"
+			"defaultValue": "@{linkedService().p_linked_service_storage_url}"
 		},
 		"breweries_api_properties_typeProperties_url": {
 			"type": "string",
