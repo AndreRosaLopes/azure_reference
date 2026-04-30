@@ -8,9 +8,6 @@
 		"AzureDatabricks1_accessToken": {
 			"value": ""
 		},
-		"DataLakeStorageGen2Sink_accountKey": {
-			"value": ""
-		},
 		"DataLakeStorageGen2Sink_properties_typeProperties_url": {
 			"value": "https://devoneac1970496f74b3.dfs.core.windows.net/"
 		},

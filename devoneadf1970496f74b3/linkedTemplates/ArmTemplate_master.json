@@ -11,10 +11,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
 		},
-		"DataLakeStorageGen2Sink_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'DataLakeStorageGen2Sink'"
-		},
 		"DataLakeStorageGen2Sink_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://devoneac1970496f74b3.dfs.core.windows.net/"
@@ -52,9 +48,6 @@
 					},
 					"AzureDatabricks1_accessToken": {
 						"value": "[parameters('AzureDatabricks1_accessToken')]"
-					},
-					"DataLakeStorageGen2Sink_accountKey": {
-						"value": "[parameters('DataLakeStorageGen2Sink_accountKey')]"
 					},
 					"DataLakeStorageGen2Sink_properties_typeProperties_url": {
 						"value": "[parameters('DataLakeStorageGen2Sink_properties_typeProperties_url')]"
