@@ -84,6 +84,9 @@
 					"secureInput": false
 				},
 				"userProperties": [],
+				"typeProperties": {
+					"jobId": "478688970863341"
+				},
 				"linkedServiceName": {
 					"referenceName": "Serverless",
 					"type": "LinkedServiceReference"
