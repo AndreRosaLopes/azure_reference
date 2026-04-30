@@ -84,11 +84,8 @@
 					"secureInput": false
 				},
 				"userProperties": [],
-				"typeProperties": {
-					"jobId": "958390155857179"
-				},
 				"linkedServiceName": {
-					"referenceName": "AzureDatabricks1",
+					"referenceName": "Serverless",
 					"type": "LinkedServiceReference"
 				}
 			}
