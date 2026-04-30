@@ -9,6 +9,10 @@
 			"databricks_url": {
 				"type": "string",
 				"value": "https://adb-7405609667599018.18.azuredatabricks.net"
+			},
+			"databricks_workspace_id": {
+				"type": "string",
+				"value": "/subscriptions/24629d6d-64a5-49ac-97ff-6d8b924e3610/resourceGroups/dev-one-rg-1970496f74b3/providers/Microsoft.Databricks/workspaces/dev-one-databricks-1970496f74b3"
 			}
 		}
 	},
