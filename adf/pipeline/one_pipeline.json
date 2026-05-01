@@ -79,7 +79,7 @@
 						"parameters": {
 							"p_container": "one",
 							"p_folder": {
-								"value": "api/breweries/year=@{\n    formatDateTime(convertFromUtc(utcNow(),'E. South America Standard Time'),'yyyy')\n}/month=@{\n    formatDateTime(convertFromUtc(utcNow(),'E. South America Standard Time'),'MM')\n}/day=@{\n    formatDateTime(convertFromUtc(utcNow(),'E. South America Standard Time'),'dd')\n}\n",
+								"value": "api/breweries/year=@{formatDateTime(convertFromUtc(utcNow(),'E. South America Standard Time'),'yyyy')}/month=@{formatDateTime(convertFromUtc(utcNow(),'E. South America Standard Time'),'MM')}/day=@{formatDateTime(convertFromUtc(utcNow(),'E. South America Standard Time'),'dd')}\n",
 								"type": "Expression"
 							},
 							"p_file": "breweries.json"
