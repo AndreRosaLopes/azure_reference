@@ -1,0 +1,24 @@
+{
+	"name": "source_rest_breweries",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "rest_linked_service",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_api_breweries_page": {
+				"type": "Int",
+				"defaultValue": 1
+			}
+		},
+		"annotations": [],
+		"type": "RestResource",
+		"typeProperties": {
+			"relativeUrl": {
+				"value": "/v1/breweries?page=@dataset().p_api_breweries_page",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}
