@@ -17,9 +17,6 @@
 			"p_file": {
 				"type": "string",
 				"defaultValue": "file.json"
-			},
-			"p_storage_url": {
-				"type": "string"
 			}
 		},
 		"annotations": [],
