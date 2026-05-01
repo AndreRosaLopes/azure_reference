@@ -7,10 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "devoneadf1970496f74b3"
 		},
-		"AzureDatabricks1_accessToken": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accessToken' of 'AzureDatabricks1'"
-		},
 		"DataLakeStorageGen2Sink_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://devoneac1970496f74b3.dfs.core.windows.net/"
@@ -130,11 +126,6 @@
 				],
 				"policy": {
 					"elapsedTimeMetric": {}
-				},
-				"variables": {
-					"storage_url": {
-						"type": "String"
-					}
 				},
 				"annotations": [],
 				"lastPublishTime": "2026-04-23T18:06:01Z"
@@ -266,23 +257,6 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/DataLakeStorageGen2Sink')]"
 			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureDatabricks1')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureDatabricks",
-				"typeProperties": {
-					"domain": "https://adb-7405604562127871.11.azuredatabricks.net",
-					"accessToken": {
-						"type": "SecureString",
-						"value": "[parameters('AzureDatabricks1_accessToken')]"
-					}
-				}
-			},
-			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DataLakeStorageGen2Sink')]",
