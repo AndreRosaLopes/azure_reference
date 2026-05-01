@@ -66,13 +66,13 @@
 				]
 			},
 			{
-				"name": "mart_breweries",
+				"name": "beweries",
 				"type": "DatabricksJob",
 				"dependsOn": [
 					{
 						"activity": "breweries2",
 						"dependencyConditions": [
-							"Completed"
+							"Succeeded"
 						]
 					}
 				],
@@ -85,13 +85,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"jobId": "439877275774515",
-					"jobParameters": {
-						"p_url_databricks": {
-							"value": "@pipeline().globalParameters.databricks_url",
-							"type": "Expression"
-						}
-					}
+					"jobId": "439877275774515"
 				},
 				"linkedServiceName": {
 					"referenceName": "Serverless",
