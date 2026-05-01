@@ -36,7 +36,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"expression": {
-						"value": "@equals(length(activity('breweries').output), 50)",
+						"value": "@equals(length(activity('breweries').output.value), 50)",
 						"type": "Expression"
 					},
 					"activities": [
