@@ -3,13 +3,7 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "DataLakeStorageGen2Sink",
-			"type": "LinkedServiceReference",
-			"parameters": {
-				"p_linked_service_storage_url": {
-					"value": "@dataset().p_storage_url",
-					"type": "Expression"
-				}
-			}
+			"type": "LinkedServiceReference"
 		},
 		"parameters": {
 			"p_container": {

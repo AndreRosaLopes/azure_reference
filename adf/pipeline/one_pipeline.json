@@ -60,10 +60,6 @@
 							"p_file": {
 								"value": "@concat(\n    'breweries_',\n    formatDateTime(\n        convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),\n        'HHmmss'\n    ),\n    '_',\n    pipeline().RunId,\n    '.json'\n)",
 								"type": "Expression"
-							},
-							"p_storage_url": {
-								"value": "@pipeline().globalParameters.storage_url",
-								"type": "Expression"
 							}
 						}
 					}
