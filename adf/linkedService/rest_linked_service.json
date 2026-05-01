@@ -4,7 +4,7 @@
 		"annotations": [],
 		"type": "RestService",
 		"typeProperties": {
-			"url": "https://api.openbrewerydb.org/v1/breweries",
+			"url": "https://api.openbrewerydb.org/",
 			"enableServerCertificateValidation": true,
 			"authenticationType": "Anonymous"
 		}
