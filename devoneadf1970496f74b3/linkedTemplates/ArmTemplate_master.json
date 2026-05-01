@@ -15,6 +15,10 @@
 			"type": "string",
 			"defaultValue": "https://api.openbrewerydb.org/v1/breweries"
 		},
+		"rest_linked_service_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://api.openbrewerydb.org"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -47,6 +51,9 @@
 					},
 					"breweries_api_properties_typeProperties_url": {
 						"value": "[parameters('breweries_api_properties_typeProperties_url')]"
+					},
+					"rest_linked_service_properties_typeProperties_url": {
+						"value": "[parameters('rest_linked_service_properties_typeProperties_url')]"
 					}
 				}
 			},

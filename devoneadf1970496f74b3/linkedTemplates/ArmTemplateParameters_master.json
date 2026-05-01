@@ -11,6 +11,9 @@
 		"breweries_api_properties_typeProperties_url": {
 			"value": "https://api.openbrewerydb.org/v1/breweries"
 		},
+		"rest_linked_service_properties_typeProperties_url": {
+			"value": "https://api.openbrewerydb.org"
+		},
 		"containerUri": {
 			"value": ""
 		},
