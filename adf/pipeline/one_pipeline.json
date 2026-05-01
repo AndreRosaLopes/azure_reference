@@ -99,11 +99,6 @@
 				}
 			}
 		],
-		"variables": {
-			"storage_url": {
-				"type": "String"
-			}
-		},
 		"annotations": [],
 		"lastPublishTime": "2026-04-23T18:06:01Z"
 	},
