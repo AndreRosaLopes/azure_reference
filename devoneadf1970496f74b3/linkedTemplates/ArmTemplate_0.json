@@ -13,7 +13,7 @@
 		},
 		"DataLakeStorageGen2Sink_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "@{linkedService().p_linked_service_storage_url}"
+			"defaultValue": "https://devoneac1970496f74b3.dfs.core.windows.net/"
 		},
 		"breweries_api_properties_typeProperties_url": {
 			"type": "string",
@@ -46,12 +46,6 @@
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"parameters": {
-					"p_linked_service_storage_url": {
-						"type": "String",
-						"defaultValue": "url"
-					}
-				},
 				"annotations": [],
 				"type": "AzureBlobFS",
 				"typeProperties": {
@@ -68,7 +62,7 @@
 				"annotations": [],
 				"type": "AzureDatabricks",
 				"typeProperties": {
-					"domain": "https://adb-7405610813235620.0.azuredatabricks.net",
+					"domain": "https://adb-7405609667599018.18.azuredatabricks.net",
 					"authentication": "MSI",
 					"workspaceResourceId": "/subscriptions/24629d6d-64a5-49ac-97ff-6d8b924e3610/resourceGroups/dev-one-rg-1970496f74b3/providers/Microsoft.Databricks/workspaces/dev-one-databricks-1970496f74b3"
 				}
@@ -171,13 +165,7 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "DataLakeStorageGen2Sink",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"p_linked_service_storage_url": {
-							"value": "@dataset().p_storage_url",
-							"type": "Expression"
-						}
-					}
+					"type": "LinkedServiceReference"
 				},
 				"parameters": {
 					"p_container": {
@@ -191,9 +179,6 @@
 					"p_file": {
 						"type": "string",
 						"defaultValue": "file.json"
-					},
-					"p_storage_url": {
-						"type": "string"
 					}
 				},
 				"annotations": [],
@@ -286,10 +271,6 @@
 									"p_file": {
 										"value": "@concat(\n    'breweries_',\n    formatDateTime(\n        convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),\n        'HHmmss'\n    ),\n    '_',\n    pipeline().RunId,\n    '.json'\n)",
 										"type": "Expression"
-									},
-									"p_storage_url": {
-										"value": "@pipeline().globalParameters.storage_url",
-										"type": "Expression"
 									}
 								}
 							}
@@ -315,7 +296,13 @@
 						},
 						"userProperties": [],
 						"typeProperties": {
-							"jobId": "478688970863341"
+							"jobId": "439877275774515",
+							"jobParameters": {
+								"p_url_databricks": {
+									"value": "@pipeline().globalParameters.databricks_url",
+									"type": "Expression"
+								}
+							}
 						},
 						"linkedServiceName": {
 							"referenceName": "Serverless",

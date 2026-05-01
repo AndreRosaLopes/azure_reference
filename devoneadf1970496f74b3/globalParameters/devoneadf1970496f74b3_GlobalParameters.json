@@ -1,10 +1,1 @@
-{
-	"storage_url": {
-		"type": "string",
-		"value": "https://devoneac1970496f74b3.dfs.core.windows.net/"
-	},
-	"databricks_url": {
-		"type": "string",
-		"value": "https://adb-7405609667599018.18.azuredatabricks.net"
-	}
-}
+{}
