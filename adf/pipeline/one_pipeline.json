@@ -3,76 +3,13 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "breweries2",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "00:10:00",
-					"retry": 3,
-					"retryIntervalInSeconds": 60,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "JsonSource",
-						"storeSettings": {
-							"type": "HttpReadSettings",
-							"maxConcurrentConnections": 1,
-							"requestMethod": "GET",
-							"requestTimeout": "00:00:02"
-						},
-						"formatSettings": {
-							"type": "JsonReadSettings"
-						}
-					},
-					"sink": {
-						"type": "JsonSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings",
-							"maxConcurrentConnections": 1,
-							"copyBehavior": "PreserveHierarchy",
-							"blockSizeInMB": 4
-						},
-						"formatSettings": {
-							"type": "JsonWriteSettings"
-						}
-					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "breweries_json",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "sink_json_adls2",
-						"type": "DatasetReference",
-						"parameters": {
-							"p_container": "one",
-							"p_folder": {
-								"value": "@concat(\n    'bronze/api/openbrewery/',\n    'year=', formatDateTime(convertTimeZone(utcNow(),'UTC','E. South America Standard Time'), 'yyyy'),\n    '/month=', formatDateTime(convertTimeZone(utcNow(),'UTC','E. South America Standard Time'), 'MM'),\n    '/day=', formatDateTime(convertTimeZone(utcNow(),'UTC','E. South America Standard Time'), 'dd')\n)",
-								"type": "Expression"
-							},
-							"p_file": {
-								"value": "@concat(\n    'breweries_',\n    formatDateTime(\n        convertTimeZone(utcNow(),'UTC','E. South America Standard Time'),\n        'HHmmss'\n    ),\n    '_',\n    pipeline().RunId,\n    '.json'\n)",
-								"type": "Expression"
-							}
-						}
-					}
-				]
-			},
-			{
-				"name": "mart_breweries",
+				"name": "beweries",
 				"type": "DatabricksJob",
 				"dependsOn": [
 					{
-						"activity": "breweries2",
+						"activity": "breweries",
 						"dependencyConditions": [
-							"Completed"
+							"Succeeded"
 						]
 					}
 				],
@@ -85,14 +22,90 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"jobId": "478688970863341"
+					"jobId": "439877275774515"
 				},
 				"linkedServiceName": {
 					"referenceName": "Serverless",
 					"type": "LinkedServiceReference"
 				}
+			},
+			{
+				"name": "breweries",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.00:10:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "RestSource",
+						"httpRequestTimeout": "00:01:40",
+						"requestInterval": "00.00:00:00.010",
+						"requestMethod": "GET",
+						"paginationRules": {
+							"QueryParameters.page": "RANGE:1:250:1"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "FlattenHierarchy"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "source_rest_breweries",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_api_breweries_page": 1
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "sink_json_adls2",
+						"type": "DatasetReference",
+						"parameters": {
+							"p_container": "one",
+							"p_folder": {
+								"value": "api/breweries/year=@{formatDateTime(convertFromUtc(utcNow(),'E. South America Standard Time'),'yyyy')}/month=@{formatDateTime(convertFromUtc(utcNow(),'E. South America Standard Time'),'MM')}/day=@{formatDateTime(convertFromUtc(utcNow(),'E. South America Standard Time'),'dd')}",
+								"type": "Expression"
+							},
+							"p_file": "breweries.json"
+						}
+					}
+				]
 			}
 		],
+		"variables": {
+			"api_breweries_page": {
+				"type": "Integer",
+				"defaultValue": 1
+			},
+			"api_breweries_hasData": {
+				"type": "Boolean",
+				"defaultValue": true
+			},
+			"api_breweries_pagesRead": {
+				"type": "Integer",
+				"defaultValue": 0
+			},
+			"api_breweries_nextPage": {
+				"type": "Integer",
+				"defaultValue": 0
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2026-04-23T18:06:01Z"
 	},
