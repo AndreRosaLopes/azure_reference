@@ -1,6 +1,6 @@
-def write_to_silver_batch(df, target_table, join_cols, partition_col):
+def merge_batch(df, target_table, join_cols, partition_col=None):
     """
-    Writes a DataFrame to a Silver table using MERGE logic (Batch version).
+    Writes a DataFrame to a Delta table using MERGE logic (Batch version).
     Ensures idempotency and uses Partition Pruning for performance.
     """
     spark = df.sparkSession
@@ -12,7 +12,7 @@ def write_to_silver_batch(df, target_table, join_cols, partition_col):
 
     j_cols = [join_cols] if isinstance(join_cols, str) else join_cols
     merge_condition = " AND ".join([f"t.{c} = s.{c}" for c in j_cols ])
-    
+
     # 3. Executa o MERGE (Insert-Only para deduplicação)
     spark.sql(f"""
         MERGE INTO {target_table} t
@@ -25,9 +25,9 @@ def write_to_silver_batch(df, target_table, join_cols, partition_col):
     spark.catalog.dropTempView("batch_updates")
 
 
-def write_to_silver(df, target_table, join_cols, partition_col, checkpoint_location):
+def merge_stream(df, target_table, join_cols, partition_col=None, checkpoint_location=None):
     """
-    Writes a streaming DataFrame to a Silver table using MERGE logic via foreachBatch.
+    Writes a streaming DataFrame to a Delta table using MERGE logic via foreachBatch.
     Includes the .trigger(availableNow=True) for compatibility with Serverless compute.
     """
     
@@ -42,7 +42,7 @@ def write_to_silver(df, target_table, join_cols, partition_col, checkpoint_locat
         # Construct the JOIN condition dynamically
         j_cols = [join_cols] if isinstance(join_cols, str) else join_cols
         merge_condition = " AND ".join([f"t.{c} = s.{c}" for c in j_cols])
-        
+
         # Execute the MERGE statement (Insert-Only)
         micro_batch_df.sparkSession.sql(f"""
             MERGE INTO {target_table} t

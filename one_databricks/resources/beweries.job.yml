@@ -1,0 +1,45 @@
+resources:
+  jobs:
+    beweries:
+      name: beweries
+      job_clusters:
+        - job_cluster_key: default
+          new_cluster:
+            cluster_name: ""
+            data_security_mode: DATA_SECURITY_MODE_AUTO
+            is_single_node: true
+            kind: CLASSIC_PREVIEW
+            node_type_id: Standard_D4ds_v4
+            runtime_engine: STANDARD
+            spark_env_vars:
+              PYSPARK_PYTHON: /databricks/python3/bin/python3
+            spark_version: 17.3.x-scala2.13
+      tasks:
+        - task_key: silver
+          job_cluster_key: default
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ..\src\breweries_silver.py
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+        - task_key: gold
+          depends_on:
+            - task_key: silver
+          job_cluster_key: default
+          email_notifications: {}
+          notebook_task:
+            notebook_path: ..\src\breweries_silver.py
+            source: WORKSPACE
+          run_if: ALL_SUCCESS
+          timeout_seconds: 0
+          webhook_notifications: {}
+      email_notifications:
+        no_alert_for_skipped_runs: false
+      max_concurrent_runs: 1
+      performance_target: PERFORMANCE_OPTIMIZED
+      queue:
+        enabled: true
+      timeout_seconds: 0
+      webhook_notifications: {}

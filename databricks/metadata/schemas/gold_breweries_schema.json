@@ -1,0 +1,22 @@
+{
+  "partition_by": [
+    "state"
+  ],
+  "schema": {
+    "type": "struct",
+    "fields": [
+      {
+        "name": "state",
+        "type": "string",
+        "nullable": true,
+        "metadata": {}
+      },
+      {
+        "name": "total_number_of_beweries",
+        "type": "long",
+        "nullable": false,
+        "metadata": {}
+      }
+    ]
+  }
+}

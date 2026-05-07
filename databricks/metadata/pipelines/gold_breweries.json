@@ -1,0 +1,50 @@
+{
+  "steps": [
+    {
+      "module": "src.utils.io",
+      "function": "read_stream",
+      "inputs": {
+        "spark": "spark"
+      },
+      "params": {
+        "format": "delta",
+        "table": "one.silver.breweries"
+      },
+      "output": "df_silver"
+    },
+    {
+      "module": "src.utils.agg_function",
+      "function": "apply_aggregation",
+      "inputs": {
+        "df": "df_silver"
+      },
+      "params": {
+        "agg_by": [
+          "state"
+        ],
+        "metrics": [
+          [
+            "total_number_of_beweries",
+            "id",
+            "count"
+          ]
+        ]
+      },
+      "output": "df_gold"
+    },
+    {
+      "module": "src.utils.merge",
+      "function": "merge_stream",
+      "inputs": {
+        "df": "df_gold"
+      },
+      "params": {
+        "target_table": "one.gold.breweries_count_by_state",
+        "join_cols": [
+          "state"
+        ],
+        "checkpoint_location": "/Volumes/one/gold/checkpoints/breweries_count"
+      }
+    }
+  ]
+}

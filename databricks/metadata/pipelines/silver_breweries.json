@@ -1,0 +1,89 @@
+{
+  "steps": [
+    {
+      "module": "src.utils.io",
+      "function": "read_stream",
+      "inputs": {
+        "spark": "spark"
+      },
+      "params": {
+        "format": "cloudFiles",
+        "options": {
+          "cloudFiles.format": "json",
+          "cloudFiles.schemaLocation": "/Volumes/one/silver/schemas/breweries"
+        },
+        "path": "/Volumes/one/bronze/api"
+      },
+      "output": "df_raw"
+    },
+    {
+      "module": "src.utils.spark_utils",
+      "function": "add_metadata_columns",
+      "inputs": {
+        "df": "df_raw"
+      },
+      "params": {},
+      "output": "df_meta"
+    },
+    {
+      "module": "src.utils.spark_utils",
+      "function": "add_hash_column",
+      "inputs": {
+        "df": "df_meta"
+      },
+      "params": {},
+      "output": "df_hash"
+    },
+    {
+      "module": "src.utils.spark_utils",
+      "function": "apply_standard_transformations",
+      "inputs": {
+        "df": "df_hash"
+      },
+      "params": {
+        "partition_col": []
+      },
+      "output": "df_std"
+    },
+    {
+      "module": "src.utils.data_quality",
+      "function": "validate_not_null",
+      "inputs": {
+        "df": "df_std"
+      },
+      "params": {
+        "join_cols": [
+          "id",
+          "row_hash"
+        ]
+      },
+      "output": "df_valid"
+    },
+    {
+      "module": "src.utils.spark_utils",
+      "function": "deduplicate_data",
+      "inputs": {
+        "df": "df_valid"
+      },
+      "params": {
+        "order_col": "id"
+      },
+      "output": "df_final"
+    },
+    {
+      "module": "src.utils.merge",
+      "function": "merge_stream",
+      "inputs": {
+        "df": "df_final"
+      },
+      "params": {
+        "target_table": "one.silver.breweries",
+        "join_cols": [
+          "id",
+          "row_hash"
+        ],
+        "checkpoint_location": "/Volumes/one/silver/checkpoints/breweries"
+      }
+    }
+  ]
+}
